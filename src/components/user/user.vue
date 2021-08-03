@@ -97,7 +97,8 @@
                         :enterable="false">
               <el-button type="warning"
                          icon="el-icon-setting"
-                         size="mini"></el-button>
+                         size="mini"
+                         @click="showSetRoleDialog(bScope.row)"></el-button>
             </el-tooltip>
           </template>
         </el-table-column>
@@ -130,6 +131,34 @@
           <el-button>取 消</el-button>
           <el-button type="primary"
                      @click="editUserInf">确 定</el-button>
+        </span>
+      </el-dialog>
+      <!-- 分配角色对话框 -->
+      <el-dialog title="分配角色"
+                 :visible.sync="setRoleDialogVisible"
+                 width="50%"
+                 @close="selectedRole = null">
+        <div class="margin-bottom"><span>当前的用户：{{selectedUserInf.username}}</span></div>
+        <div class="margin-bottom"><span>当前的角色：{{selectedUserInf.role_name}}</span></div>
+        <div class="margin-bottom">
+          <span>
+            分配新角色：
+            <el-select v-model="selectedRole"
+                       placeholder="请选择"
+                       size="medium">
+              <el-option v-for="item in allRoleInf"
+                         :key="item.id"
+                         :label="item.roleName"
+                         :value="item.id">
+              </el-option>
+            </el-select>
+          </span>
+        </div>
+        <span slot="footer"
+              class="dialog-footer">
+          <el-button @click="setRoleDialogVisible = false">取 消</el-button>
+          <el-button type="primary"
+                     @click="changeRole">确 定</el-button>
         </span>
       </el-dialog>
       <!-- 分页器 -->
@@ -191,8 +220,11 @@ export default {
         email: [{ required: true, message: '请输入邮箱', trigger: 'blur' }, { validator: checkEmail, trigger: 'blur' }],
         mobile: [{ required: true, message: '请输入手机号', trigger: 'blur' }, { validator: checkMobile, trigger: 'blur' }]
       },
-      userInf: {}
-
+      userInf: {},
+      setRoleDialogVisible: false,
+      selectedUserInf: {},
+      allRoleInf: [],
+      selectedRole: ''
     }
   },
   methods: {
@@ -268,11 +300,36 @@ export default {
       if (delResult.meta.status !== 200) return this.$message.error('删除用户失败')
       this.$message.success('删除用户成功')
       this.getUserList()
-    }
+    },
+    async showSetRoleDialog (inf) {
+      this.setRoleDialogVisible = true
+      this.selectedUserInf = inf
 
+      const { data: roleInf } = await this.$http.get('roles')
+      this.allRoleInf = roleInf.data
+
+      const { data: res } = await this.$http.get(`users/${inf.id}`)
+      if (res.data.rid !== 0) { this.selectedRole = res.data.rid }
+      //console.log(this.selectedRole)
+      //console.log(this.allRoleInf)
+    },
+    async changeRole () {
+      const { data: result } = await this.$http.put(`users/${this.selectedUserInf.id}/role`, { rid: this.selectedRole })
+      if (result.meta.status !== 200) return this.$message.error('分配角色失败')
+      this.$message.success('分配角色成功')
+      this.selectedRole = null
+      this.setRoleDialogVisible = false
+      this.getUserList()
+    }
   }
 }
 </script>
 
 <style>
+.margin-bottom {
+  margin-bottom: 18px;
+}
+.margin-bottom:last-child {
+  margin-bottom: 0;
+}
 </style>

@@ -57,7 +57,7 @@ export default {
       this.$refs.loginFormRef.validate(async (valid) => {
         if (!valid) return;
         const { data: result } = await this.$http.post('login', this.loginForm);
-        console.log(result);
+        //console.log(result);
         if (result.meta.status === 400) return this.$message({ message: '登录失败', type: "warning" });
         this.$message({ message: '登录成功', type: "success" })
         // 登录成功后 1.存储toker到sessionStorage 2.跳转到home
