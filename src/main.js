@@ -6,6 +6,7 @@ import ElementUI from 'element-ui'
 import './plugins/element.js'
 import './assets/css/global.css'
 import './fonts/iconfont.css'
+import ZKTable from 'vue-table-with-tree-grid'
 
 import axios from 'axios'
 
@@ -17,6 +18,7 @@ axios.interceptors.request.use(config => {
 Vue.prototype.$http = axios
 
 Vue.use(ElementUI)
+Vue.use(ZKTable)
 
 Vue.config.productionTip = false
 

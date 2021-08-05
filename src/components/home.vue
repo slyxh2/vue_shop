@@ -17,7 +17,8 @@
                  :collapse="isCollapse"
                  :collapse-transition="false"
                  :router="true"
-                 :default-active="activePath">
+                 :default-active="activePath"
+                 ref="menuRef">
           <el-submenu :index="item.id + ''"
                       v-for="item in menuList"
                       :key="item.id">
@@ -59,12 +60,19 @@ export default {
         '145': 'iconfont icon-baobiao'
       },
       isCollapse: false,
-      activePath: ''
+      activePath: '',
     }
   },
   created () {
     this.getMenuList()
     this.activePath = window.sessionStorage.getItem('activePath')
+  },
+  updated () {
+    //this.$refs.menuRef.defaultActive = this.$route.path
+    //console.log(this.$refs.menuRef)
+  },
+  watch: {
+    '$route': 'updatePath'
   },
   methods: {
     logout () {
@@ -83,6 +91,13 @@ export default {
     saveActivePath (activePath) {
       window.sessionStorage.setItem('activePath', activePath)
       this.activePath = activePath
+    },
+    updatePath () {
+      if (this.$route.path === '/welcome') {
+        //console.log('www')
+        this.activePath = null
+      }
+      else { this.activePath = this.$route.path }
     }
   }
 }
