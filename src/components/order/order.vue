@@ -47,12 +47,26 @@
           </template>
         </el-table-column>
         <el-table-column label="操作">
-          <el-button type="primary"
-                     icon="el-icon-edit"
-                     @click="showEditDialog"></el-button>
-          <el-button type="success"
-                     icon="el-icon-location-outline"
-                     @click="showProcessDialog"></el-button>
+          <template slot-scope="scope">
+            <el-tooltip effect="dark"
+                        content="修改地址"
+                        placement="top"
+                        :enterable="false">
+              <el-button type="primary"
+                         icon="el-icon-edit"
+                         circle
+                         @click="showEditDialog(scope.row)"></el-button>
+            </el-tooltip>
+            <el-tooltip effect="dark"
+                        content="物流状态"
+                        placement="top"
+                        :enterable="false">
+              <el-button type="success"
+                         icon="el-icon-location-outline"
+                         circle
+                         @click="showProcessDialog(scope.row)"></el-button>
+            </el-tooltip>
+          </template>
         </el-table-column>
       </el-table>
       <!-- 分页器 -->

@@ -26,9 +26,9 @@ const list = () => import(/* webpackChunkName: "list_add" */ '../components/good
 const add = () => import(/* webpackChunkName: "list_add" */ '../components/goods/add.vue')
 
 //import order from '../components/order/order.vue'
-const order = () => import(/* webpackChunkName: "list_add" */ '../components/order/order.vue')
+const order = () => import(/* webpackChunkName: "order_report" */ '../components/order/order.vue')
 //import report from '../components/report/report.vue'
-const report = () => import(/* webpackChunkName: "list_add" */ '../components/report/report.vue')
+const report = () => import(/* webpackChunkName: "order_report" */ '../components/report/report.vue')
 
 Vue.use(VueRouter)
 
